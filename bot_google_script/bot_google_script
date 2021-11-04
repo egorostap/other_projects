@@ -1,0 +1,39 @@
+let token = '915961085:AAEmfviX4RXAZzFzr21B773O1hmBMLlRK-w';
+
+function getMe() {
+  let response = UrlFetchApp.fetch('https://api.telegram.org/bot' + token + '/getMe');
+  console.log(response.getContentText());
+}
+
+function setWebHook() {
+  let webAppUrl = 'https://script.google.com/macros/s/AKfycbwpFmmpx9MNmEzI42GLox9XFyUYaWKQtb0bnbXugBeods1u1Gz1NHGK2G9F3z0fSH0X3A/exec';
+  let response = UrlFetchApp.fetch('https://api.telegram.org/bot' + token + '/setWebHook?url=' + webAppUrl);
+  console.log(response.getContentText());
+}
+
+function sendText(chat_id, text) {
+  let data = {
+    method: "post",
+    payload: {
+      method: "sendMessage",
+      chat_id: String(chat_id),
+      text: text,
+      parse_mode: "HTML"
+    }
+  };
+  UrlFetchApp.fetch('https://api.telegram.org/bot' + token + '/', data);
+}
+
+function send() {
+  let chat_id = 286855290;
+  let text = "Привет! Как дела?";
+  sendText(chat_id, text);
+}
+
+function doPost(e) {
+  let contents = JSON.parse(e.postData.contents);
+  let chat_id = contents.message.chat.id;
+  let text = contents.message.text;
+  sendText(chat_id, text);
+  SpreadsheetApp.openById('1o0YkICV_sQFvaep1SOxxK4EFJovmjIWBJQ2eiEm-dJ4').getSheetByName('messages').appendRow([chat_id, text]);
+}
