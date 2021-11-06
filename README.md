@@ -1,4 +1,4 @@
-# other_projects
+# ресурсы по ботам
 
 Bot_sheets
 
